@@ -49,6 +49,11 @@ function filterByQuery(query, animalsArray) {
     return filteredResults;
   }
 
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+}
+
 //Route for animals. get() requires two arguments, the first string is the route the client fetches data
 //Second is a callback function that will execute every time the route is accessed with a GET request
 //Send() method for res param to send the string 'Hello!' to our client
@@ -60,6 +65,23 @@ app.get('/api/animals', (req, res) => {
     }
     res.json(results);
 });
+
+//The req object gives us access to another property for this case, req.params. Unlike the query object, the param object needs to be defined in the route path, with <route>/:<parameterName>.
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    res.json(result);
+});
+
+//Sends 404 error code when client searches for something with no record
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    } else {
+        res.send(404);
+    }
+});
+
 //Port init. Heroku apps get served using port 80
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}`);
