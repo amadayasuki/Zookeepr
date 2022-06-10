@@ -60,7 +60,7 @@ app.get('/api/animals', (req, res) => {
     }
     res.json(results);
 });
-//Port init
+//Port init. Heroku apps get served using port 80
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}`);
 });
